@@ -76,8 +76,60 @@ class marathon::install (
     extension        => 'tgz',
     checksum         => true,
     digest_url       => $digest_url,
-    digest_type      => $digest_type
+    digest_type      => $digest_type,
+    notify           => [File[$install_dir]]
   })
 
+  if $manage_firewall == true and $options['HTTP_ADDRESS'] != undef and $options['HTTP_PORT'] != undef {
+    if !defined(Class['firewalld2iptables']) {
+      class { 'firewalld2iptables':
+        manage_package   => true,
+        iptables_ensure  => 'latest',
+        iptables_enable  => true,
+        ip6tables_enable => true
+      }
+    }
 
+    if !defined(Class['firewall']) {
+      class { 'firewall': }
+    }
+
+    if !defined(Service['firewalld']) {
+      service { 'firewalld':
+        ensure => 'stopped'
+      }
+    }
+
+    firewall { "0_${service_name}_allow_incoming":
+      port        => [$options['HTTP_PORT']],
+      proto       => 'tcp',
+      require     => [Class['firewall']],
+      destination => $options['HTTP_ADDRESS'],
+      action      => 'accept'
+    }
+  }
+
+  if $manage_service == true {
+    file {"/usr/lib/systemd/system/${service_name}.service":
+      ensure  => file,
+      content => template('marathon/services/marathon.service.erb'),
+      owner   => $user,
+      mode    => 'u=rwxs,o=r',
+      recurse => true
+    }
+
+    service {"${service_name}":
+      ensure   => 'running',
+      provider => 'systemd',
+      enable   => true,
+      require  => [Exec["Reload_for_${service_name}"]]
+    }
+
+    exec{ "Reload_for_${service_name}":
+      path    => [$::path],
+      command => 'systemctl daemon-reload',
+      notify  => [Service[$service_name]],
+      require => [File["/usr/lib/systemd/system/${service_name}.service"]]
+    }
+  }
 }
