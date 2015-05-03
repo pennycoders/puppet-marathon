@@ -16,9 +16,9 @@ class marathon(
 # Marathon binary url
   $url                      = 'https://downloads.mesosphere.io/marathon/v0.8.2-RC1/marathon-0.8.2-RC1.tgz',
 # Marathon binary digest url
-  $digest_url             = 'https://downloads.mesosphere.io/marathon/v0.8.2-RC1/marathon-0.8.2-RC1.tgz.sha256',
+  $digest_url               = 'https://downloads.mesosphere.io/marathon/v0.8.2-RC1/marathon-0.8.2-RC1.tgz.sha256',
 # The digest type
-  $digest_type            = 'sha256',
+  $digest_type              = 'sha256',
 # Temporary directory to download the files to
   $tmp_dir                  = '/tmp',
 # Marathon Installation directory

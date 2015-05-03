@@ -6,9 +6,9 @@ class marathon::install (
 # Marathon binary url
   $url                     = $marathon::url,
 # Marathon binary digest url
-  $digest_url            = $marathon::digest_url,
+  $digest_url              = $marathon::digest_url,
 # The digest type
-  $digest_type            = 'sha256',
+  $digest_type             = 'sha256',
 # Temporary directory to download the files to
   $tmp_dir                 = $marathon::tmp_dir,
 # Marathon Installation directory
@@ -22,9 +22,9 @@ class marathon::install (
 # Create and manage the marathon service
   $manage_service          = $marathon::manage_service,
 # The marathon service's name
-  $service_name             = $marathon::service_name,
+  $service_name            = $marathon::service_name,
 # The marathon options
-  $options                  = $marathon::options,
+  $options                 = $marathon::options,
 # Manage the firewall rules
   $manage_firewall         = $marathon::manage_firewall,
 # Manage the user that the tasks will be submitted as
