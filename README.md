@@ -102,7 +102,7 @@ This module installs and configures Mesosphere's marathon task runner.
 
 Pay attention when specifying the marathon options in Hiera, specially the ones requiring double quotes or special characters,
 such as in the example below.
-```puppet
+```json
     "ACCESS_CONTROL_ALLOW_ORIGIN":"\\\"*\\\"",
 ```
 As you can see, since I am using the json Hiera backend, both the " and the \ need to be present within the service file.
