@@ -75,7 +75,7 @@ class marathon::install (
     strip_components => 1,
     follow_redirects => true,
     extension        => 'tgz',
-    checksum         => true,
+    checksum         => $checksum,
     digest_url       => $digest_url,
     digest_type      => $digest_type,
     notify           => [File[$install_dir]]
