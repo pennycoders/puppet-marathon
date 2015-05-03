@@ -110,7 +110,7 @@ class marathon::install (
     }
   }
 
-  file {$install_dir:
+  file { $install_dir:
     ensure  => directory,
     owner   => $user,
     mode    => 'u=rwxs,o=r',
@@ -118,7 +118,7 @@ class marathon::install (
   }
 
   if $manage_service == true {
-    file {"/usr/lib/systemd/system/${service_name}.service":
+    file { "/usr/lib/systemd/system/${service_name}.service":
       ensure  => file,
       content => template('marathon/services/marathon.service.erb'),
       owner   => $user,
@@ -128,7 +128,7 @@ class marathon::install (
       require => [Archive[$service_name]]
     }
 
-    service {"${service_name}":
+    service { $service_name:
       ensure   => 'running',
       provider => 'systemd',
       enable   => true,
