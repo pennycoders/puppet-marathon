@@ -124,6 +124,7 @@ class marathon::install (
       owner   => $user,
       mode    => 'u=rwxs,o=r',
       recurse => true,
+      notify  => [Exec["Reload_for_${service_name}"]]
       require => [Archive[$service_name]]
     }
 
