@@ -138,7 +138,7 @@ This module installs and configures Mesosphere's marathon task runner.
     }
     ```
 ## Important:
-    Please see [The Marathon documentation](https://mesosphere.github.io/marathon/docs/command-line-flags.html) before you use to use this module.
+Please see [The Marathon documentation](https://mesosphere.github.io/marathon/docs/command-line-flags.html) before you use to use this module.
     
 ## Other notes
 
