@@ -44,14 +44,14 @@ class marathon(
 # Global haproxy options
   $haproxy_global_options   = hiera('classes::haproxy::global_options', {}),
 # Default HAproxy options
-  $haproxy_default_options  = hiera('classes::haproxy::default_options', {})
+  $haproxy_defaults_options = hiera('classes::haproxy::defaults_options', {})
 ) {
 
   validate_bool($create_symlinks, $manage_service, $manage_firewall, $manage_user, $haproxy_discovery, $checksum)
   validate_absolute_path($tmp_dir, $install_dir)
   validate_string($url, $digest_string, $user)
   validate_re($installation_ensure, '^(present|absent)$',"${installation_ensure} is not supported for installation_ensure. Allowed values are 'present' and 'absent'.")
-  validate_hash($options, $haproxy_global_options, $haproxy_default_options)
+  validate_hash($options, $haproxy_global_options, $haproxy_defaults_options)
 
   if $options != undef and $options['HTTP_ADDRESS'] != undef {
     if  !has_interface_with('ipaddress', $options['HTTP_ADDRESS']) {
@@ -62,4 +62,11 @@ class marathon(
   anchor{ 'marathon::install::start': } ->
   class { 'marathon::install': } ->
   anchor { 'marathon::install::end': }
+
+  if $haproxy_discovery == true {
+    anchor{ 'marathon::haproxy_config::start': } ->
+    class {'marathon::haproxy':}
+    anchor{ 'marathon::haproxy_config::end': }
+  }
+
 }

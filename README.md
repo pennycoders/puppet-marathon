@@ -42,7 +42,7 @@ This module installs and configures Mesosphere's marathon task runner.
             # Global haproxy options
               $haproxy_global_options   = hiera('classes::haproxy::global_options', {}),
             # Default HAproxy options
-              $haproxy_default_options  = hiera('classes::haproxy::default_options', {})
+              $haproxy_defaults_options = hiera('classes::haproxy::defaults_options', {})
         ) {
     ```
     
@@ -83,14 +83,14 @@ This module installs and configures Mesosphere's marathon task runner.
           # Global haproxy options
             $haproxy_global_options  = $marathon::haproxy_global_options,
           # Default HAproxy options
-            $haproxy_default_options = $marathon::haproxy_default_options
+            $haproxy_defaults_options = $marathon::haproxy_defaults_options
     ) inherits marathon {
     ```
 
-* __marathon::haproxy_config:__ This is the class that actually installs and configures haproxy
+* __marathon::haproxy:__ This is the class that actually installs and configures haproxy
     * __Parameters:__
     ```puppet
-    class marathon::haproxy_config (
+    class marathon::haproxy (
           # Install or uninstall (present|absent)
             $installation_ensure     = $marathon::installation_ensure,
           # Marathon binary url
@@ -124,7 +124,7 @@ This module installs and configures Mesosphere's marathon task runner.
           # Global haproxy options
             $haproxy_global_options  = $marathon::haproxy_global_options,
           # Default HAproxy options
-            $haproxy_default_options = $marathon::haproxy_default_options
+            $haproxy_defaults_options = $marathon::haproxy_defaults_options
     ) inherits marathon {
     ```
     
