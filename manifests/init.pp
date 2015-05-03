@@ -65,7 +65,7 @@ class marathon(
 
   if $haproxy_discovery == true {
     anchor{ 'marathon::haproxy_config::start': } ->
-    class {'marathon::haproxy':}
+    class {'marathon::haproxy_config':}
     anchor{ 'marathon::haproxy_config::end': }
   }
 

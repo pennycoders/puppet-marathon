@@ -87,10 +87,10 @@ This module installs and configures Mesosphere's marathon task runner.
     ) inherits marathon {
     ```
 
-* __marathon::haproxy:__ This is the class that actually installs and configures haproxy
+* __marathon::haproxy_config:__ This is the class that actually installs and configures haproxy
     * __Parameters:__
     ```puppet
-    class marathon::haproxy (
+    class marathon::haproxy_config (
           # Install or uninstall (present|absent)
             $installation_ensure     = $marathon::installation_ensure,
           # Marathon binary url
