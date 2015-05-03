@@ -27,7 +27,7 @@
     }
   ],
   "license": "Apache-2.0",
-  "name": "pennycoders-mesos",
+  "name": "pennycoders-marathon",
   "operatingsystem_support": [
     {
       "operatingsystem": "CentOS",
