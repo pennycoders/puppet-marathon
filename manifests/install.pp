@@ -2,13 +2,13 @@
 
 class marathon::install (
 # Install or uninstall (present|absent)
-  $installation_ensure     = 'present',
+  $installation_ensure     = $marathon::install_ensure,
 # Marathon binary url
   $url                     = $marathon::url,
 # Marathon binary digest string
   $digest_string           = $marathon::digest_string,
 # The digest type
-  $digest_type             = 'sha256',
+  $digest_type             = $marathon::digest_type,
 # Temporary directory to download the files to
   $tmp_dir                 = $marathon::tmp_dir,
 # Marathon Installation directory
