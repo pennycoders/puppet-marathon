@@ -53,11 +53,10 @@
   "tags": [
     "Mesos",
     "Apache",
-    "Mesosphere",
     "Marathon",
     "Docker",
     "Cloud",
     "Mesosphere"
   ],
-  "version": "1.0.2"
+  "version": "1.0.3"
 }
