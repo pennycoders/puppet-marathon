@@ -5,8 +5,8 @@ class marathon::install (
   $installation_ensure     = 'present',
 # Marathon binary url
   $url                     = $marathon::url,
-# Marathon binary digest url
-  $digest_string              = $marathon::digest_string,
+# Marathon binary digest string
+  $digest_string           = $marathon::digest_string,
 # The digest type
   $digest_type             = 'sha256',
 # Temporary directory to download the files to
