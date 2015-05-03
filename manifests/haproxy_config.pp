@@ -1,4 +1,4 @@
-class marathon::install (
+class marathon::haproxy_config (
   # Install or uninstall (present|absent)
     $installation_ensure     = $marathon::installation_ensure,
   # Marathon binary url

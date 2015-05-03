@@ -1,5 +1,4 @@
 # Marathon installation class
-
 class marathon::install (
   # Install or uninstall (present|absent)
     $installation_ensure     = $marathon::installation_ensure,
