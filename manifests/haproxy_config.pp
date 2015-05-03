@@ -48,7 +48,7 @@ class marathon::haproxy_config (
   }
 
   ensure_resource('class', 'haproxy',{
-    haproxy_global_options  => $haproxy_global_options,
-    haproxy_defaults_options => $haproxy_defaults_options
+    global_options   => $haproxy_global_options,
+    defaults_options => $haproxy_defaults_options
   })
 }
