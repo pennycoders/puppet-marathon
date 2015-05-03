@@ -38,7 +38,7 @@ class marathon::install (
 ) inherits marathon {
 
   validate_bool($create_symlinks, $manage_service, $manage_firewall, $manage_user, $haproxy_discovery, $checksum)
-  validate_path($tmp_dir, $install_dir)
+  validate_absolute_path($tmp_dir, $install_dir)
   validate_string($url, $digest_url, $user)
   validate_re($installation_ensure, '^(present|absent)$',"${installation_ensure} is not supported for installation_ensure. Allowed values are 'present' and 'absent'.")
   validate_hash($options, $haproxy_global_options, $haproxy_default_options)
