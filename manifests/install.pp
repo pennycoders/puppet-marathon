@@ -112,7 +112,6 @@ class marathon::install (
 
   file {$install_dir:
     ensure  => directory,
-    content => template('marathon/services/marathon.service.erb'),
     owner   => $user,
     mode    => 'u=rwxs,o=r',
     recurse => true
