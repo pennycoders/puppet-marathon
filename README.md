@@ -105,7 +105,14 @@ such as in the example below.
 ```json
     "ACCESS_CONTROL_ALLOW_ORIGIN":"\\\"*\\\"",
 ```
+
 As you can see, since I am using the json Hiera backend, both the " and the \ need to be present within the service file.
 Due to the fact that within the template they are already within double quotes, I had to make sure I escape them propperly.
 
 Have fun!
+
+#### __IMPORTANT:__
+
+#### __TO DO:__
+
+Add haproxy installation and configuration support
