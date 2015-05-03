@@ -6,7 +6,7 @@ class marathon::install (
 # Marathon binary url
   $url                     = $marathon::url,
 # Marathon binary digest url
-  $digest_url              = $marathon::digest_url,
+  $digest_string              = $marathon::digest_string,
 # The digest type
   $digest_type             = 'sha256',
 # Temporary directory to download the files to
@@ -39,7 +39,7 @@ class marathon::install (
 
   validate_bool($create_symlinks, $manage_service, $manage_firewall, $manage_user, $haproxy_discovery, $checksum)
   validate_absolute_path($tmp_dir, $install_dir)
-  validate_string($url, $digest_url, $user)
+  validate_string($url, $digest_string, $user)
   validate_re($installation_ensure, '^(present|absent)$',"${installation_ensure} is not supported for installation_ensure. Allowed values are 'present' and 'absent'.")
   validate_hash($options, $haproxy_global_options, $haproxy_default_options)
 
@@ -76,7 +76,7 @@ class marathon::install (
     follow_redirects => true,
     extension        => 'tgz',
     checksum         => $checksum,
-    digest_url       => $digest_url,
+    digest_string       => $digest_string,
     digest_type      => $digest_type,
     notify           => [File[$install_dir]]
   })
