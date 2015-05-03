@@ -67,7 +67,7 @@ class marathon::install (
     }
   }
 
-  ensure_resource('archive', 'marathon', {
+  ensure_resource('archive', $service_name, {
     ensure           => present,
     url              => $url,
     src_target       => $tmp_dir,
@@ -116,7 +116,8 @@ class marathon::install (
       content => template('marathon/services/marathon.service.erb'),
       owner   => $user,
       mode    => 'u=rwxs,o=r',
-      recurse => true
+      recurse => true,
+      require => [Archive[$service_name]]
     }
 
     service {"${service_name}":
@@ -127,10 +128,11 @@ class marathon::install (
     }
 
     exec{ "Reload_for_${service_name}":
-      path    => [$::path],
-      command => 'systemctl daemon-reload',
-      notify  => [Service[$service_name]],
-      require => [File["/usr/lib/systemd/system/${service_name}.service"]]
+      path        => [$::path],
+      command     => 'systemctl daemon-reload',
+      refreshonly => true,
+      notify      => [Service[$service_name]],
+      require     => [File["/usr/lib/systemd/system/${service_name}.service"]]
     }
   }
 }
