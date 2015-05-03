@@ -95,3 +95,17 @@ This module installs and configures Mesosphere's marathon task runner.
         user            => 'root'
     }
     ```
+## Important:
+    Please see [The Marathon documentation](https://mesosphere.github.io/marathon/docs/command-line-flags.html) before you use to use this module.
+    
+## Other notes
+
+Pay attention when specifying the marathon options in Hiera, specially the ones requiring double quotes or special characters,
+such as in the example below.
+```puppet
+    "ACCESS_CONTROL_ALLOW_ORIGIN":"\\\"*\\\"",
+```
+As you can see, since I am using the json Hiera backend, both the " and the \ need to be present within the service file.
+Due to the fact that within the template they are already within double quotes, I had to make sure I escape them propperly.
+
+Have fun!
