@@ -137,7 +137,6 @@ class marathon::install (
     exec{ "Reload_for_${service_name}":
       path        => [$::path],
       command     => 'systemctl daemon-reload',
-      refreshonly => true,
       notify      => [Service[$service_name]],
       require     => [File["/usr/lib/systemd/system/${service_name}.service"]]
     }
