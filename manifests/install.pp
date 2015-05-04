@@ -122,7 +122,6 @@ class marathon::install (
       content => template('marathon/services/marathon.service.erb'),
       owner   => $user,
       mode    => 'u=rwxs,o=r',
-      recurse => true,
       notify  => [Exec["Reload_for_${service_name}"]],
       require => [Archive[$service_name]]
     }
