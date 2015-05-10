@@ -4,8 +4,9 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Puppet modules" level="application" />
+    <orderEntry type="library" name="stub [puppet module]" level="application" />
   </component>
+  <component name="PuppetLibraryUpdateService" isEnabled="true" />
   <component name="PuppetModuleSettings">
     <option name="confdir" value="C:\Users\Penny\.puppet" />
     <option name="modulePath" value="C:\Users\Penny\.puppet\modules" />

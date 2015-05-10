@@ -44,12 +44,20 @@ class marathon(
 # Global haproxy options
   $haproxy_global_options   = hiera('classes::haproxy::global_options', {}),
 # Default HAproxy options
-  $haproxy_defaults_options = hiera('classes::haproxy::defaults_options', {})
+  $haproxy_defaults_options = hiera('classes::haproxy::defaults_options', {}),
+#  Consul package url
+  $consul_url               = 'https://dl.bintray.com/mitchellh/consul/0.5.0_linux_amd64.zip',
+#  Whether the consul package's integrity should be verified
+  $consul_checksum          = true,
+#  Consul digest string
+  $consul_digest_string     = '161f2a8803e31550bd92a00e95a3a517aa949714c19d3124c46e56cfdc97b088',
+#  Consul installation directory
+  $consul_install_dir       = '/opt/consul'
 ) {
 
-  validate_bool($create_symlinks, $manage_service, $manage_firewall, $manage_user, $haproxy_discovery, $checksum)
-  validate_absolute_path($tmp_dir, $install_dir)
-  validate_string($url, $digest_string, $user)
+  validate_bool($create_symlinks, $manage_service, $manage_firewall, $manage_user, $haproxy_discovery, $checksum, $consul_checksum)
+  validate_absolute_path($tmp_dir, $install_dir, $consul_install_dir)
+  validate_string($url, $digest_string, $user, $consul_digest_string, $consul_url)
   validate_re($installation_ensure, '^(present|absent)$',"${installation_ensure} is not supported for installation_ensure. Allowed values are 'present' and 'absent'.")
   validate_hash($options, $haproxy_global_options, $haproxy_defaults_options)
 
