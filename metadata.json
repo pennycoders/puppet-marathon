@@ -28,7 +28,7 @@
     {
       "name": "KyleAnderson/consul",
       "version_requirement": ">= 1.0.0"
-    },
+    }
   ],
   "license": "Apache-2.0",
   "name": "pennycoders-marathon",

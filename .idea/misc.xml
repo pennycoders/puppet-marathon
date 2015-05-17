@@ -11,6 +11,16 @@
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectRootManager" version="2" />
+  <component name="PuppetProjectConfiguration">
+    <environmentSettings>
+      <PuppetEnvironmentSettings currentEnvironmentName="master">
+        <environmentSet>
+          <Environment name="production" modulepath="C:\Users\Penny\.puppet\modules" />
+          <Environment name="master" modulepath="C:\Users\Penny\.puppet\modules" />
+        </environmentSet>
+      </PuppetEnvironmentSettings>
+    </environmentSettings>
+  </component>
   <component name="ZipChangesCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
