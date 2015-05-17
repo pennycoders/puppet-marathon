@@ -25,41 +25,37 @@ class marathon(
   $install_dir              = '/opt/marathon',
 # The username that marathon will submit tasks as
   $user                     = 'root',
-# Whether or not to create scripts in /usr/local/bin
-  $create_symlinks          = true,
 # Create symlinks for the marathon binaries for easier access
-  $haproxy_discovery        = false,
+  $create_symlinks          = true,
+#  Whether or not to use consul (http://consul.io) for service discovery
+  $consul_discovery         = true,
 # Create and manage the marathon service
   $manage_service           = true,
 # The marathon service's name
   $service_name             = 'marathon',
 # The marathon options
-  $options                  = hiera('classes::marathon::options', {}),
+  $options                  = hiera('classes::marathon::options', { }),
 # Manage the firewall rules
   $manage_firewall          = false,
 # Manage the user that the tasks will be submitted as
   $manage_user              = true,
 # Whether or not the integrity of the archive should be verified
   $checksum                 = true,
-# Global haproxy options
-  $haproxy_global_options   = hiera('classes::haproxy::global_options', {}),
-# Default HAproxy options
-  $haproxy_defaults_options = hiera('classes::haproxy::defaults_options', {}),
 #  Consul package url
   $consul_url               = 'https://dl.bintray.com/mitchellh/consul/0.5.0_linux_amd64.zip',
 #  Whether the consul package's integrity should be verified
   $consul_checksum          = true,
 #  Consul digest string
   $consul_digest_string     = '161f2a8803e31550bd92a00e95a3a517aa949714c19d3124c46e56cfdc97b088',
-#  Consul installation directory
-  $consul_install_dir       = '/opt/consul'
+#  Consul configuration
+  $consul_options           = hiera('classes::consul::options',{ })
 ) {
 
-  validate_bool($create_symlinks, $manage_service, $manage_firewall, $manage_user, $haproxy_discovery, $checksum, $consul_checksum)
-  validate_absolute_path($tmp_dir, $install_dir, $consul_install_dir)
+  validate_bool($create_symlinks, $manage_service, $manage_firewall, $manage_user, $consul_discovery, $checksum, $consul_checksum)
+  validate_absolute_path($tmp_dir, $install_dir)
   validate_string($url, $digest_string, $user, $consul_digest_string, $consul_url)
   validate_re($installation_ensure, '^(present|absent)$',"${installation_ensure} is not supported for installation_ensure. Allowed values are 'present' and 'absent'.")
-  validate_hash($options, $haproxy_global_options, $haproxy_defaults_options)
+  validate_hash($options, $consul_options)
 
   if $options != undef and $options['HTTP_ADDRESS'] != undef {
     if  !has_interface_with('ipaddress', $options['HTTP_ADDRESS']) {
@@ -71,9 +67,9 @@ class marathon(
   class { 'marathon::install': } ->
   anchor { 'marathon::install::end': }
 
-  if $haproxy_discovery == true {
+  if $consul_discovery == true {
     anchor{ 'marathon::haproxy_config::start': } ->
-    class {'marathon::haproxy_config':}
+    class { 'marathon::haproxy_config': }
     anchor{ 'marathon::haproxy_config::end': }
   }
 
