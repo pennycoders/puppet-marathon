@@ -15,8 +15,8 @@ class marathon::haproxy_config (
   $user                     = $marathon::user,
 # Create symlinks for the marathon binaries for easier access
   $create_symlinks          = $marathon::create_symlinks,
-#  Whether or not to use consul (http://consul.io) for service discovery
-  $consul_discovery         = $marathon::consul_discovery,
+#  Whether to use haproxy for load balancing between services
+  $haproxy_discovery        = false,
 # Create and manage the marathon service
   $manage_service           = $marathon::manage_service,
 # The marathon service's name
@@ -29,6 +29,8 @@ class marathon::haproxy_config (
   $manage_user              = $marathon::manage_user,
 # Whether or not the integrity of the archive should be verified
   $checksum                 = $marathon::checksum,
+#  Whether or not to use consul (http://consul.io) for service discovery
+  $consul_discovery         = $marathon::consul_discovery,
 #  Consul package url
   $consul_url               = $marathon::consul_url,
 #  Whether the consul package's integrity should be verified
@@ -39,7 +41,7 @@ class marathon::haproxy_config (
   $consul_options           = $marathon::consul_options
 ) inherits marathon {
 
-  validate_bool($create_symlinks, $manage_service, $manage_firewall, $manage_user, $consul_discovery, $checksum, $consul_checksum)
+  validate_bool($create_symlinks, $manage_service, $manage_firewall, $manage_user, $haproxy_discovery, $consul_discovery, $checksum, $consul_checksum)
   validate_absolute_path($tmp_dir, $install_dir)
   validate_string($url, $digest_string, $user, $consul_digest_string, $consul_url)
   validate_re($installation_ensure, '^(present|absent)$',"${installation_ensure} is not supported for installation_ensure. Allowed values are 'present' and 'absent'.")

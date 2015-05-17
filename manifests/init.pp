@@ -27,8 +27,8 @@ class marathon(
   $user                     = 'root',
 # Create symlinks for the marathon binaries for easier access
   $create_symlinks          = true,
-#  Whether or not to use consul (http://consul.io) for service discovery
-  $consul_discovery         = true,
+#  Whether to use haproxy for load balancing between services
+  $haproxy_discovery        = false,
 # Create and manage the marathon service
   $manage_service           = true,
 # The marathon service's name
@@ -41,6 +41,8 @@ class marathon(
   $manage_user              = true,
 # Whether or not the integrity of the archive should be verified
   $checksum                 = true,
+#  Whether or not to use consul (http://consul.io) for service discovery
+  $consul_discovery         = false,
 #  Consul package url
   $consul_url               = 'https://dl.bintray.com/mitchellh/consul/0.5.0_linux_amd64.zip',
 #  Whether the consul package's integrity should be verified
@@ -51,7 +53,7 @@ class marathon(
   $consul_options           = hiera('classes::consul::options',{ })
 ) {
 
-  validate_bool($create_symlinks, $manage_service, $manage_firewall, $manage_user, $consul_discovery, $checksum, $consul_checksum)
+  validate_bool($create_symlinks, $manage_service, $manage_firewall, $manage_user, $haproxy_discovery, $consul_discovery, $checksum, $consul_checksum)
   validate_absolute_path($tmp_dir, $install_dir)
   validate_string($url, $digest_string, $user, $consul_digest_string, $consul_url)
   validate_re($installation_ensure, '^(present|absent)$',"${installation_ensure} is not supported for installation_ensure. Allowed values are 'present' and 'absent'.")
