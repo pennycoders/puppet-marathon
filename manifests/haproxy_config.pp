@@ -31,21 +31,19 @@ class marathon::haproxy_config (
   $checksum                 = $marathon::checksum,
 #  Whether or not to use consul (http://consul.io) for service discovery
   $consul_discovery         = $marathon::consul_discovery,
-#  Consul package url
-  $consul_url               = $marathon::consul_url,
-#  Whether the consul package's integrity should be verified
-  $consul_checksum          = $marathon::consul_checksum,
-#  Consul digest string
-  $consul_digest_string     = $marathon::consul_digest_string,
 #  Consul configuration
-  $consul_options           = $marathon::consul_options
+  $consul_options           = $marathon::consul_options,
+# Whether to install consul-template or not
+  $install_consul_template  = $marathon::install_consul_template,
+#  consul-template options
+  $consul_template_options  = $marathon::consul_template_options
 ) inherits marathon {
 
-  validate_bool($create_symlinks, $manage_service, $manage_firewall, $manage_user, $haproxy_discovery, $consul_discovery, $checksum, $consul_checksum)
+  validate_bool($create_symlinks, $manage_service, $manage_firewall, $manage_user, $haproxy_discovery, $consul_discovery, $checksum, $install_consul_template)
   validate_absolute_path($tmp_dir, $install_dir)
-  validate_string($url, $digest_string, $user, $consul_digest_string, $consul_url)
+  validate_string($url, $digest_string, $user)
   validate_re($installation_ensure, '^(present|absent)$',"${installation_ensure} is not supported for installation_ensure. Allowed values are 'present' and 'absent'.")
-  validate_hash($options, $consul_options)
+  validate_hash($options, $consul_options, $consul_template_options)
 
   if $options != undef and $options['HTTP_ADDRESS'] != undef {
     if  !has_interface_with('ipaddress', $options['HTTP_ADDRESS']) {
@@ -53,5 +51,9 @@ class marathon::haproxy_config (
     }
   }
 
-  notify{'Installing and configuring consul & haproxy...':}
+  package { 'haproxy':
+    ensure => 'present'
+  }
+
+
 }

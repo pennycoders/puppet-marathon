@@ -28,6 +28,10 @@
     {
       "name": "KyleAnderson/consul",
       "version_requirement": ">= 1.0.0"
+    },
+    {
+      "name": "gdhbashton/consul_template",
+      "version_requirement": ">= 0.1.3"
     }
   ],
   "license": "Apache-2.0",
