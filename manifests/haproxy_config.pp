@@ -122,7 +122,7 @@ class marathon::haproxy_config (
       use_name        => true,
       volumes         => ["${docker_socket_bind}:/tmp/docker.sock"],
       memory_limit    => '10m',
-      hostname        => "${::fqdn}",
+      hostname        => $::fqdn,
       pull_on_start   => true
     })
   }

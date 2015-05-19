@@ -62,7 +62,7 @@ class marathon(
 #  How often should registrator query docker for services (See: https://github.com/gliderlabs/registrator)
   $registrator_resync       = 30,
 #  Additional registrator flags
-  $registrator_args         = ""
+  $registrator_args         = ''
 ) {
 
   validate_bool(
