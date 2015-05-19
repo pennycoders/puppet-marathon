@@ -54,7 +54,11 @@ This module installs and configures Mesosphere's marathon task runner.
         # Docker DNS
           $docker_dns                = '8.8.8.8',
         # Whether to install registraator or not
-          $install_registrator       = true
+          $install_registrator       = true,
+        #  How often should registrator query docker for services (See: https://github.com/gliderlabs/registrator)
+          $registrator_resync        = 30,
+        #  Additional registrator flags
+          $registrator_args          = ""
     ) {
     ```
     
@@ -107,7 +111,11 @@ This module installs and configures Mesosphere's marathon task runner.
         # Docker DNS
           $docker_dns               = $marathon::docker_dns,
         # Whether to install registraator or not
-          $install_registrator      = $marathon::install_registrator
+          $install_registrator      = $marathon::install_registrator,
+        #  How often should registrator query docker for services (See: https://github.com/gliderlabs/registrator)
+          $registrator_resync       = $marathon::registrator_resync,
+        #  Additional registrator flags
+          $registrator_args          = $marathon::registrator_args
     ) inherits marathon {
     ```
 
@@ -160,7 +168,11 @@ This module installs and configures Mesosphere's marathon task runner.
         # Docker DNS
           $docker_dns               = $marathon::docker_dns,
         # Whether to install registraator or not
-          $install_registrator      = $marathon::install_registrator
+          $install_registrator      = $marathon::install_registrator,
+        #  How often should registrator query docker for services (See: https://github.com/gliderlabs/registrator)
+          $registrator_resync       = $marathon::registrator_resync,
+        #  Additional registrator flags
+          $registrator_args          = $marathon::registrator_args
     ) inherits marathon {
     ```
     
@@ -188,9 +200,3 @@ As you can see, since I am using the json Hiera backend, both the " and the \ ne
 Due to the fact that within the template they are already within double quotes, I had to make sure I escape them propperly.
 
 Have fun!
-
-#### __IMPORTANT:__
-
-#### __TO DO:__
-
-Add haproxy installation and configuration support
