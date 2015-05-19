@@ -86,7 +86,7 @@ class marathon::haproxy_config (
   if $install_docker == true {
     ensure_resource('class','docker',{
       dns          => $docker_dns,
-      socket_bind  => "unix:///${docker_socket_bind}",
+      socket_bind  => "unix://${docker_socket_bind}",
       docker_users => [$user],
       socket_group => $user
     })
@@ -103,8 +103,7 @@ class marathon::haproxy_config (
   }
 
   if $install_registrator == true {
-  #    docker run -d -v /run/docker.sock:/tmp/docker.sock -h $HOSTNAME gliderlabs/registrator -ip 172.16.0.98 consul://172.0.16.98:8500 -join=172.16.0.98
-    ensure_resource('docker::run','registrator', {
+  ensure_resource('docker::run','registrator', {
       image           => 'gliderlabs/registrator:latest',
       command         => "-ip ${consul_options['client_addr']} consul://${consul_template_options['consul_host']}:${consul_template_options['consul_port']}",
       use_name        => true,
