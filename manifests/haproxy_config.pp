@@ -106,7 +106,7 @@ class marathon::haproxy_config (
   #    docker run -d -v /run/docker.sock:/tmp/docker.sock -h $HOSTNAME gliderlabs/registrator -ip 172.16.0.98 consul://172.0.16.98:8500 -join=172.16.0.98
     ensure_resource('docker::run','registrator', {
       image           => 'gliderlabs/registrator:latest',
-      command         => "consul://${consul_options['client_addr']}",
+      command         => "-ip ${consul_options['client_addr']} consul://${consul_options['client_addr']}",
       use_name        => true,
       volumes         => ["${docker_socket_bind}:/tmp/docker.sock"],
       memory_limit    => '10m',
