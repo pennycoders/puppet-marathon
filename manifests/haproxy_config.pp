@@ -105,6 +105,10 @@ class marathon::haproxy_config (
     ensure_resource('package','haproxy',{
       ensure => 'latest'
     })
+
+    if is_hash($consul_template_watches) and count($consul_template_watches) > 0 {
+      create_resources('consul_template::watch', $consul_template_watches)
+    }
   }
 
   if $consul_discovery == true {
