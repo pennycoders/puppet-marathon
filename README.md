@@ -186,8 +186,12 @@ This module installs and configures Mesosphere's marathon task runner.
     }
     ```
 ## Important:
-Please see [The Marathon documentation](https://mesosphere.github.io/marathon/docs/command-line-flags.html) before you use to use this module.
-    
+Before using this module, please see:
+ * [The Marathon documentation](https://mesosphere.github.io/marathon/docs/command-line-flags.html)
+ * [The consul documentation] (https://www.consul.io/docs/agent/options.html) 
+ * [The Registrator documentation] (https://github.com/gliderlabs/registrator) 
+ * [The consul-template documentation] (https://github.com/hashicorp/consul-template) 
+
 ## Other notes
 
 Pay attention when specifying the marathon options in Hiera, specially the ones requiring double quotes or special characters,
