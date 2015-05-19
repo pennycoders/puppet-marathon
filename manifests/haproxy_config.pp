@@ -83,25 +83,38 @@ class marathon::haproxy_config (
     }
   }
 
+  if $install_docker == true {
+    ensure_resource('class','docker',{
+      dns          => $docker_dns,
+      socket_bind  => "unix:///${docker_socket_bind}",
+      docker_users => [$user],
+      socket_group => $user
+    })
+  }
+
   if $haproxy_discovery == true {
     ensure_resource('package','haproxy',{
       ensure => 'latest'
     })
-
-  #    docker run -d -v /run/docker.sock:/tmp/docker.sock -h $HOSTNAME gliderlabs/registrator -ip 172.16.0.98 consul://172.0.16.98:8500 -join=172.16.0.98
-    if $install_docker == true {
-      ensure_resource('class','docker',{
-        dns          => $docker_dns,
-        socket_bind  => "unix:///${docker_socket_bind}",
-        docker_users => [$user],
-        socket_group => $user
-      })
-    }
   }
 
   if $consul_discovery == true {
     ensure_resource('class', 'consul', $consul_options)
   }
+
+  if $install_registrator == true {
+  #    docker run -d -v /run/docker.sock:/tmp/docker.sock -h $HOSTNAME gliderlabs/registrator -ip 172.16.0.98 consul://172.0.16.98:8500 -join=172.16.0.98
+    ensure_resource('docker::run','registrator', {
+      image           => 'gliderlabs/registrator:latest',
+      command         => "consul://${consul_options['client_addr']}",
+      use_name        => true,
+      volumes         => ["${docker_socket_bind}:/tmp/docker.sock"],
+      memory_limit    => '10m',
+      hostname        => "${::fqdn}",
+      pull_on_start   => true
+    })
+  }
+
 
   if $install_consul_template == true {
     ensure_resource('class', 'consul_template', $consul_template_options)
