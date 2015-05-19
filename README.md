@@ -194,9 +194,9 @@ This module installs and configures Mesosphere's marathon task runner.
 ## Important:
 Before using this module, please see:
  * [The Marathon documentation](https://mesosphere.github.io/marathon/docs/command-line-flags.html)
- * [The consul documentation] (https://www.consul.io/docs/agent/options.html) 
- * [The Registrator documentation] (https://github.com/gliderlabs/registrator) 
- * [The consul-template documentation] (https://github.com/hashicorp/consul-template) 
+ * [The consul documentation] (https://www.consul.io/docs/agent/options.html) and the [Consul puppet module documentation] (https://github.com/solarkennedy/puppet-consul)
+ * [The Registrator documentation] (https://github.com/gliderlabs/registrator) and the [Docker puppet module documentation] (https://github.com/garethr/garethr-docker)
+ * [The consul-template documentation] (https://github.com/hashicorp/consul-template) and the [consul_tempalte puppet module documentation] (https://github.com/gdhbashton/puppet-consul_template)
 
 ## Other notes
 
