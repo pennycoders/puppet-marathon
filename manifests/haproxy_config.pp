@@ -105,7 +105,7 @@ class marathon::haproxy_config (
   if $install_registrator == true {
   ensure_resource('docker::run','registrator', {
       image           => 'gliderlabs/registrator:latest',
-      command         => "-ip ${consul_options['client_addr']} consul://${consul_template_options['consul_host']}:${consul_template_options['consul_port']}",
+      command         => "-ip ${consul_options['config_hash']['client_addr']} consul://${consul_template_options['consul_host']}:${consul_template_options['consul_port']}",
       use_name        => true,
       volumes         => ["${docker_socket_bind}:/tmp/docker.sock"],
       memory_limit    => '10m',
