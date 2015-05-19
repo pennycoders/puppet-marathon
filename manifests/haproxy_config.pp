@@ -44,7 +44,11 @@ class marathon::haproxy_config (
 # Docker DNS
   $docker_dns               = $marathon::docker_dns,
 # Whether to install registraator or not
-  $install_registrator      = $marathon::install_registrator
+  $install_registrator      = $marathon::install_registrator,
+#  How often should registrator query docker for services (See: https://github.com/gliderlabs/registrator)
+  $registrator_resync       = $marathon::registrator_resync,
+#  Additional registrator flags
+  $registrator_args          = $marathon::registrator_args
 ) inherits marathon {
 
   validate_bool(
@@ -68,8 +72,10 @@ class marathon::haproxy_config (
     $url,
     $digest_string,
     $user,
-    $docker_dns
+    $docker_dns,
+    $registrator_args
   )
+  validate_integer($registrator_resync)
   validate_re($installation_ensure, '^(present|absent)$',"${installation_ensure} is not supported for installation_ensure. Allowed values are 'present' and 'absent'.")
   validate_hash(
     $options,
@@ -105,7 +111,7 @@ class marathon::haproxy_config (
   if $install_registrator == true and $consul_discovery and $install_consul_template and is_hash($consul_options['config_hash']) and $consul_options['config_hash']['client_addr'] {
   ensure_resource('docker::run','registrator', {
       image           => 'gliderlabs/registrator:latest',
-      command         => "-ip ${consul_options['config_hash']['client_addr']} consul://${consul_options['config_hash']['client_addr']}:${consul_template_options['consul_port']} -resync 10 -ttl 10 -ttl-refresh 20 -deregister always -internal",
+      command         => "-ip ${consul_options['config_hash']['client_addr']} consul://${consul_options['config_hash']['client_addr']}:${consul_template_options['consul_port']} -resync ${registrator_resync} ${registrator_args}",
       use_name        => true,
       volumes         => ["${docker_socket_bind}:/tmp/docker.sock"],
       memory_limit    => '10m',

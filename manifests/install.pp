@@ -45,7 +45,11 @@ class marathon::install (
 # Docker DNS
   $docker_dns               = $marathon::docker_dns,
 # Whether to install registraator or not
-  $install_registrator      = $marathon::install_registrator
+  $install_registrator      = $marathon::install_registrator,
+#  How often should registrator query docker for services (See: https://github.com/gliderlabs/registrator)
+  $registrator_resync       = $marathon::registrator_resync,
+#  Additional registrator flags
+  $registrator_args          = $marathon::registrator_args
 ) inherits marathon {
 
   validate_bool(
@@ -69,8 +73,10 @@ class marathon::install (
     $url,
     $digest_string,
     $user,
-    $docker_dns
+    $docker_dns,
+    $registrator_args
   )
+  validate_integer($registrator_resync)
   validate_re($installation_ensure, '^(present|absent)$',"${installation_ensure} is not supported for installation_ensure. Allowed values are 'present' and 'absent'.")
   validate_hash(
     $options,
