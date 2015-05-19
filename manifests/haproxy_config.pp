@@ -55,6 +55,8 @@ class marathon::haproxy_config (
     ensure_resource('package','haproxy',{
       ensure => 'latest'
     })
+
+#    docker run -d -v /run/docker.sock:/tmp/docker.sock -h $HOSTNAME gliderlabs/registrator -ip 172.16.0.98 consul://172.0.16.98:8500 -join=172.16.0.98
   }
 
   if $consul_discovery == true {
