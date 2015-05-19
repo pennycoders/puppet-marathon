@@ -38,6 +38,8 @@ class marathon::install (
   $install_consul_template  = $marathon::install_consul_template,
 #  consul-template options
   $consul_template_options  = $marathon::consul_template_options,
+#  consul template watches
+  $consul_template_watches  = hiera('classes::consul_template::watches', { }),
 # Whether to install docker or not
   $install_docker           = $marathon::install_docker,
 # Docker socket path
@@ -49,7 +51,7 @@ class marathon::install (
 #  How often should registrator query docker for services (See: https://github.com/gliderlabs/registrator)
   $registrator_resync       = $marathon::registrator_resync,
 #  Additional registrator flags
-  $registrator_args          = $marathon::registrator_args
+  $registrator_args         = $marathon::registrator_args
 ) inherits marathon {
 
   validate_bool(
@@ -81,7 +83,8 @@ class marathon::install (
   validate_hash(
     $options,
     $consul_options,
-    $consul_template_options
+    $consul_template_options,
+    $consul_template_watches
   )
 
   if $options != undef and $options['HTTP_ADDRESS'] != undef {

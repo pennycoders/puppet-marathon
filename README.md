@@ -47,18 +47,20 @@ This module installs and configures Mesosphere's marathon task runner.
           $install_consul_template  = false,
         #  consul-template options
           $consul_template_options  = hiera('classes::consul_template::options', { }),
+        #  consul template watches
+          $consul_template_watches  = hiera('classes::consul_template::watches', { }),
         # Whether to install docker or not
           $install_docker           = true,
         # Docker socket path
-          $docker_socket_bind        = '/var/run/docker.sock',
+          $docker_socket_bind       = '/var/run/docker.sock',
         # Docker DNS
-          $docker_dns                = '8.8.8.8',
+          $docker_dns               = '8.8.8.8',
         # Whether to install registraator or not
-          $install_registrator       = true,
+          $install_registrator      = true,
         #  How often should registrator query docker for services (See: https://github.com/gliderlabs/registrator)
-          $registrator_resync        = 30,
+          $registrator_resync       = 30,
         #  Additional registrator flags
-          $registrator_args          = ""
+          $registrator_args         = ""
     ) {
     ```
     
@@ -104,6 +106,8 @@ This module installs and configures Mesosphere's marathon task runner.
           $install_consul_template  = $marathon::install_consul_template,
         #  consul-template options
           $consul_template_options  = $marathon::consul_template_options,
+        #  consul template watches
+          $consul_template_watches  = hiera('classes::consul_template::watches', { }),
         # Whether to install docker or not
           $install_docker           = $marathon::install_docker,
         # Docker socket path
@@ -115,7 +119,7 @@ This module installs and configures Mesosphere's marathon task runner.
         #  How often should registrator query docker for services (See: https://github.com/gliderlabs/registrator)
           $registrator_resync       = $marathon::registrator_resync,
         #  Additional registrator flags
-          $registrator_args          = $marathon::registrator_args
+          $registrator_args         = $marathon::registrator_args
     ) inherits marathon {
     ```
 
@@ -161,6 +165,8 @@ This module installs and configures Mesosphere's marathon task runner.
           $install_consul_template  = $marathon::install_consul_template,
         #  consul-template options
           $consul_template_options  = $marathon::consul_template_options,
+        #  consul template watches
+          $consul_template_watches  = hiera('classes::consul_template::watches', { }),
         # Whether to install docker or not
           $install_docker           = $marathon::install_docker,
         # Docker socket path
@@ -172,7 +178,7 @@ This module installs and configures Mesosphere's marathon task runner.
         #  How often should registrator query docker for services (See: https://github.com/gliderlabs/registrator)
           $registrator_resync       = $marathon::registrator_resync,
         #  Additional registrator flags
-          $registrator_args          = $marathon::registrator_args
+          $registrator_args         = $marathon::registrator_args
     ) inherits marathon {
     ```
     
