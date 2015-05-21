@@ -160,7 +160,8 @@ class marathon::haproxy_config (
           Class['consul']
         ],
         content => template('marathon/configurations/consul_dns.conf.erb'),
-        owner   => $user
+        owner   => $user,
+        mode    => 'u=rwxs,o=r'
       })
 
       ensure_resource('file_line','nameserver 127.0.0.1',{
