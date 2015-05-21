@@ -111,8 +111,16 @@ class marathon::haproxy_config (
   }
 
   if $nginx_discovery == true  and $haproxy_discovery == false {
+    ensure_resource('yumrepo','nginx', {
+      descr    => 'Nginx repository',
+      baseurl  => 'http://nginx.org/packages/mainline/centos/$releasever/$basearch/',
+      gpgcheck => 0,
+      enabled  => 1
+    })
+
     ensure_resource('package','nginx',{
-      ensure => 'latest'
+      ensure  => 'latest',
+      require => [Yumrepo['nginx']]
     })
   }
 

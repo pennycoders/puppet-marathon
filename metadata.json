@@ -36,6 +36,10 @@
     {
       "name": "garethr/docker",
       "version_requirement": ">= 3.5.0"
+    },
+    {
+      "name": "example42/yum",
+      "version_requirement": ">= 2.1.18"
     }
   ],
   "license": "Apache-2.0",
