@@ -25,8 +25,10 @@ class marathon(
       $user                     = 'root',
     # Create symlinks for the marathon binaries for easier access
       $create_symlinks          = true,
-    #  Whether to use haproxy for load balancing between services
+    # Whether to use haproxy for load balancing between services
       $haproxy_discovery        = false,
+    # Whether to use nginx for load balancing between services
+      $nginx_discovery          = false,
     # Create and manage the marathon service
       $manage_service           = true,
     # The marathon service's name
@@ -39,15 +41,15 @@ class marathon(
       $manage_user              = true,
     # Whether or not the integrity of the archive should be verified
       $checksum                 = true,
-    #  Whether or not to use consul (http://consul.io) for service discovery
+    # Whether or not to use consul (http://consul.io) for service discovery
       $consul_discovery         = false,
-    #  Consul configuration
+    # Consul configuration
       $consul_options           = hiera('classes::consul::options',{ }),
     # Whether to install consul-template or not
       $install_consul_template  = false,
-    #  consul-template options
+    # Consul-template options
       $consul_template_options  = hiera('classes::consul_template::options', { }),
-    #  consul template watches
+    # Consul template watches
       $consul_template_watches  = hiera('classes::consul_template::watches', { }),
     # Whether to install docker or not
       $install_docker           = true,
@@ -57,10 +59,10 @@ class marathon(
       $docker_dns               = '8.8.8.8',
     # Whether to install registraator or not
       $install_registrator      = true,
-    #  How often should registrator query docker for services (See: https://github.com/gliderlabs/registrator)
+    # How often should registrator query docker for services (See: https://github.com/gliderlabs/registrator)
       $registrator_resync       = 30,
-    #  Additional registrator flags
-      $registrator_args         = ""
+    # Additional registrator flags
+      $registrator_args         = ''
 ) {
 ```
     
@@ -84,8 +86,10 @@ class marathon::install (
       $user                     = $marathon::user,
     # Create symlinks for the marathon binaries for easier access
       $create_symlinks          = $marathon::create_symlinks,
-    #  Whether to use haproxy for load balancing between services
-      $haproxy_discovery        = false,
+    # Whether to use haproxy for load balancing between services
+      $haproxy_discovery        = $marathon::haproxy_discovery,
+    # Whether to use nginx for load balancing between services
+      $nginx_discovery          = $marathon::nginx_discovery,
     # Create and manage the marathon service
       $manage_service           = $marathon::manage_service,
     # The marathon service's name
@@ -98,15 +102,15 @@ class marathon::install (
       $manage_user              = $marathon::manage_user,
     # Whether or not the integrity of the archive should be verified
       $checksum                 = $marathon::checksum,
-    #  Whether or not to use consul (http://consul.io) for service discovery
+    # Whether or not to use consul (http://consul.io) for service discovery
       $consul_discovery         = $marathon::consul_discovery,
-    #  Consul configuration
+    # Consul configuration
       $consul_options           = $marathon::consul_options,
     # Whether to install consul-template or not
       $install_consul_template  = $marathon::install_consul_template,
-    #  consul-template options
+    # Consul-template options
       $consul_template_options  = $marathon::consul_template_options,
-    #  consul template watches
+    # Consul template watches
       $consul_template_watches  = hiera('classes::consul_template::watches', { }),
     # Whether to install docker or not
       $install_docker           = $marathon::install_docker,
@@ -116,9 +120,9 @@ class marathon::install (
       $docker_dns               = $marathon::docker_dns,
     # Whether to install registraator or not
       $install_registrator      = $marathon::install_registrator,
-    #  How often should registrator query docker for services (See: https://github.com/gliderlabs/registrator)
+    # How often should registrator query docker for services (See: https://github.com/gliderlabs/registrator)
       $registrator_resync       = $marathon::registrator_resync,
-    #  Additional registrator flags
+    # Additional registrator flags
       $registrator_args         = $marathon::registrator_args
 ) inherits marathon {
 ```
@@ -143,8 +147,10 @@ class marathon::haproxy_config (
       $user                     = $marathon::user,
     # Create symlinks for the marathon binaries for easier access
       $create_symlinks          = $marathon::create_symlinks,
-    #  Whether to use haproxy for load balancing between services
-      $haproxy_discovery        = false,
+    # Whether to use haproxy for load balancing between services
+      $haproxy_discovery        = $marathon::haproxy_discovery,
+    # Whether to use nginx for load balancing between services
+      $nginx_discovery          = $marathon::nginx_discovery,
     # Create and manage the marathon service
       $manage_service           = $marathon::manage_service,
     # The marathon service's name
@@ -157,15 +163,15 @@ class marathon::haproxy_config (
       $manage_user              = $marathon::manage_user,
     # Whether or not the integrity of the archive should be verified
       $checksum                 = $marathon::checksum,
-    #  Whether or not to use consul (http://consul.io) for service discovery
+    # Whether or not to use consul (http://consul.io) for service discovery
       $consul_discovery         = $marathon::consul_discovery,
-    #  Consul configuration
+    # Consul configuration
       $consul_options           = $marathon::consul_options,
     # Whether to install consul-template or not
       $install_consul_template  = $marathon::install_consul_template,
-    #  consul-template options
+    # Consul-template options
       $consul_template_options  = $marathon::consul_template_options,
-    #  consul template watches
+    # Consul template watches
       $consul_template_watches  = hiera('classes::consul_template::watches', { }),
     # Whether to install docker or not
       $install_docker           = $marathon::install_docker,
@@ -175,9 +181,9 @@ class marathon::haproxy_config (
       $docker_dns               = $marathon::docker_dns,
     # Whether to install registraator or not
       $install_registrator      = $marathon::install_registrator,
-    #  How often should registrator query docker for services (See: https://github.com/gliderlabs/registrator)
+    # How often should registrator query docker for services (See: https://github.com/gliderlabs/registrator)
       $registrator_resync       = $marathon::registrator_resync,
-    #  Additional registrator flags
+    # Additional registrator flags
       $registrator_args         = $marathon::registrator_args
 ) inherits marathon {
 ```
