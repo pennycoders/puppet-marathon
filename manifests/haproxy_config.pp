@@ -138,9 +138,9 @@ class marathon::haproxy_config (
       }
 
       if is_hash($consul_options['config_hash']) and
-         is_hash($consul_options['config_hash']['ports']) and
-         $consul_options['config_hash']['ports']['dns'] {
-         $consul_dns_port = $consul_options['config_hash']['ports']['dns']
+      is_hash($consul_options['config_hash']['ports']) and
+      $consul_options['config_hash']['ports']['dns'] {
+        $consul_dns_port = $consul_options['config_hash']['ports']['dns']
       }
 
       if is_hash($consul_options['config_hash']) and
