@@ -1,5 +1,5 @@
 zone <% if @consul_dns_domain %> "<%=@consul_dns_domain %>" <% else %>"consul"<% end %> IN {
   type forward;
   forward only;
-  forwarders { <% if @consul_dns_address %> <%=@consul_dns_address %> <% else %>127.0.0.1<% end %> port <% if @consul_dns_port %> <%=@consul_dns_port %> <% else %>8600<% end %>; };
+  forwarders { <% if @consul_dns_address %> <%=@consul_dns_address %> <% else %>127.0.0.1<% end %> port <% if @consul_dns_port %><%=@consul_dns_port %><% else %>8600<% end %>; };
 };
