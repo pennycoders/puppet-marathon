@@ -132,6 +132,22 @@ class marathon::haproxy_config (
 
     if $setup_dns_forwarding == true {
 
+      if is_hash($consul_options['config_hash']) and
+      $consul_options['config_hash']['domain'] {
+        $consul_dns_domain = $consul_options['config_hash']['domain']
+      }
+
+      if is_hash($consul_options['config_hash']) and
+         is_hash($consul_options['config_hash']['ports']) and
+         $consul_options['config_hash']['ports']['dns'] {
+         $consul_dns_port = $consul_options['config_hash']['ports']['dns']
+      }
+
+      if is_hash($consul_options['config_hash']) and
+      $consul_options['config_hash']['client_addr'] {
+        $consul_dns_address = $consul_options['config_hash']['client_addr']
+      }
+
       ensure_resource('package', 'bind', {
         ensure => 'latest'
       })
@@ -139,7 +155,10 @@ class marathon::haproxy_config (
       ensure_resource('file', '/etc/named/consul.zone.conf',{
         ensure  => 'file',
         purge   => true,
-        require => [Package['bind']],
+        require => [
+          Package['bind'],
+          Class['consul']
+        ],
         content => template('marathon/configurations/consul_dns.conf.erb'),
         owner   => $user
       })
@@ -148,7 +167,6 @@ class marathon::haproxy_config (
         path    => '/etc/resolv.conf',
         line    => 'nameserver 127.0.0.1',
         require => [
-          Package['bind'],
           File['/etc/named/consul.zone.conf']
         ]
       })
@@ -167,23 +185,23 @@ class marathon::haproxy_config (
   }
 
   if $install_registrator == true and $consul_discovery and $install_consul_template and is_hash($consul_options['config_hash']) and $consul_options['config_hash']['client_addr'] {
-  ensure_resource('docker::run','registrator', {
-      image           => 'gliderlabs/registrator:latest',
-      command         => "-ip ${consul_options['config_hash']['client_addr']} consul://${consul_options['config_hash']['client_addr']}:${consul_template_options['consul_port']} -resync ${registrator_resync} ${registrator_args}",
-      use_name        => true,
-      volumes         => ["${docker_socket_bind}:/tmp/docker.sock"],
-      memory_limit    => '10m',
-      hostname        => $::fqdn,
-      pull_on_start   => true
-    })
-  }
+    ensure_resource('docker::run','registrator', {
+  image           => 'gliderlabs/registrator:latest',
+  command         => "-ip ${consul_options['config_hash']['client_addr']} consul://${consul_options['config_hash']['client_addr']}:${consul_template_options['consul_port']} -resync ${registrator_resync} ${registrator_args}",
+  use_name        => true,
+  volumes         => ["${docker_socket_bind}:/tmp/docker.sock"],
+  memory_limit    => '10m',
+  hostname        => $::fqdn,
+  pull_on_start   => true
+  })
+}
 
 
-  if $install_consul_template == true {
-    ensure_resource('class', 'consul_template', $consul_template_options)
-  }
+if $install_consul_template == true {
+  ensure_resource('class', 'consul_template', $consul_template_options)
+}
 
-  if is_hash($consul_template_watches) and count($consul_template_watches) > 0 {
-    create_resources('consul_template::watch', $consul_template_watches)
-  }
+if is_hash($consul_template_watches) and count($consul_template_watches) > 0 {
+  create_resources('consul_template::watch', $consul_template_watches)
+}
 }
