@@ -53,7 +53,9 @@ class marathon::install (
 # How often should registrator query docker for services (See: https://github.com/gliderlabs/registrator)
   $registrator_resync       = $marathon::registrator_resync,
 # Additional registrator flags
-  $registrator_args         = $marathon::registrator_args
+  $registrator_args         = $marathon::registrator_args,
+# Setup consul DNS forwarding (see https://www.consul.io/docs/guides/forwarding.html for more details)
+  $setup_dns_forwarding     = $marathon::setup_dns_forwarding
 ) inherits marathon {
 
   validate_bool(
@@ -67,7 +69,8 @@ class marathon::install (
     $checksum,
     $install_consul_template,
     $install_docker,
-    $install_registrator
+    $install_registrator,
+    $setup_dns_forwarding
   )
   validate_absolute_path(
     $tmp_dir,

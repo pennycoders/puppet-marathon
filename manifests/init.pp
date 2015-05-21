@@ -64,7 +64,9 @@ class marathon(
 # How often should registrator query docker for services (See: https://github.com/gliderlabs/registrator)
   $registrator_resync       = 30,
 # Additional registrator flags
-  $registrator_args         = ''
+  $registrator_args         = '',
+# Setup consul DNS forwarding (see https://www.consul.io/docs/guides/forwarding.html for more details)
+  $setup_dns_forwarding     = false
 ) {
 
   validate_bool(
@@ -78,7 +80,8 @@ class marathon(
     $checksum,
     $install_consul_template,
     $install_docker,
-    $install_registrator
+    $install_registrator,
+    $setup_dns_forwarding
   )
   validate_absolute_path(
     $tmp_dir,
