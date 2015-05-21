@@ -38,8 +38,7 @@
       "version_requirement": ">= 3.5.0"
     },
     {
-      "name": "example42/yum",
-      "version_requirement": ">= 2.1.18"
+      "name": "example42/yum"
     }
   ],
   "license": "Apache-2.0",
