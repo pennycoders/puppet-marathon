@@ -129,6 +129,41 @@ class marathon::haproxy_config (
 
   if $consul_discovery == true {
     ensure_resource('class', 'consul', $consul_options)
+
+    if $setup_dns_forwarding == true {
+
+      ensure_resource('package', 'bind', {
+        ensure => 'latest'
+      })
+
+      ensure_resource('file', '/etc/named/consul.zone.conf',{
+        ensure  => 'file',
+        purge   => true,
+        require => [Package['bind']],
+        content => template('marathon/configurations/consul_dns.conf.erb'),
+        owner   => $user
+      })
+
+      ensure_resource('file_line','nameserver 127.0.0.1',{
+        path    => '/etc/resolv.conf',
+        line    => 'nameserver 127.0.0.1',
+        require => [
+          Package['bind'],
+          File['/etc/named/consul.zone.conf']
+        ]
+      })
+
+      ensure_resource('file_line','include_/etc/named/*.conf',{
+        path    => '/etc/named.conf',
+        line    => 'include /etc/named/*.conf',
+        require => [File_line['nameserver 127.0.0.1']],
+        notify  => [Service['named']]
+      })
+
+      ensure_resource('service','named',{
+        ensure  => 'running'
+      })
+    }
   }
 
   if $install_registrator == true and $consul_discovery and $install_consul_template and is_hash($consul_options['config_hash']) and $consul_options['config_hash']['client_addr'] {
