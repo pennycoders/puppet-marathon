@@ -174,7 +174,7 @@ class marathon::haproxy_config (
 
       ensure_resource('file_line','include_/etc/named/*.conf',{
         path    => '/etc/named.conf',
-        line    => '"include /etc/named/*.conf";',
+        line    => 'include "/etc/named/consul.zone.conf";',
         require => [File_line['nameserver 127.0.0.1']],
         notify  => [Service['named']]
       })
