@@ -177,7 +177,7 @@ class marathon::haproxy_config (
         ensure  => 'present',
         path    => '/etc/named.conf',
         line    => 'dnssec-enable no;";',
-        match => '^.*?dnssec-enable.*$'
+        match => '^.*?dnssec-enable.*$',
         require => [File_line['nameserver 127.0.0.1']],
         notify  => [Service['named']]
       })
