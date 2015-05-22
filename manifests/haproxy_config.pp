@@ -165,6 +165,7 @@ class marathon::haproxy_config (
       })
 
       ensure_resource('file_line','nameserver 127.0.0.1',{
+        ensure  => 'present',
         path    => '/etc/resolv.conf',
         line    => 'nameserver 127.0.0.1',
         require => [
@@ -172,10 +173,23 @@ class marathon::haproxy_config (
         ]
       })
 
-      ensure_resource('file_line','include_/etc/named/*.conf',{
+      ensure_resource('file_line','dnssec-validation no;',{
+        ensure  => 'present',
         path    => '/etc/named.conf',
         line    => 'include "/etc/named/consul.zone.conf";',
+        match   => 'dnssec-validation yes;',
         require => [File_line['nameserver 127.0.0.1']],
+        notify  => [Service['named']]
+      })
+
+      ensure_resource('file_line','include_/etc/named/*.conf',{
+        ensure  => 'present',
+        path    => '/etc/named.conf',
+        line    => 'include "/etc/named/consul.zone.conf";',
+        require => [
+          File_line['nameserver 127.0.0.1'],
+          File_line['dnssec-validation no;']
+        ],
         notify  => [Service['named']]
       })
 
