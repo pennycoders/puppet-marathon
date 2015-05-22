@@ -222,3 +222,11 @@ As you can see, since I am using the json Hiera backend, both the " and the \ ne
 Due to the fact that within the template they are already within double quotes, I had to make sure I escape them propperly.
 
 Have fun!
+
+## NEW FEATURES:
+* Flexible load balancing configuration (Now you can also opt for nginx, as your load balancer __(ver. 1.0.12 and above)__
+* You can now configure dns forwarding, by using consul's dns 
+  interface (see https://www.consul.io/docs/agent/dns.html and https://www.consul.io/docs/guides/forwarding.html for more details)
+  __(ver. 1.0.12 and above)__.
+* You can also set as many template watchers as you want, for any (custom) load balancer, 
+  or anything that supports a file-based configuration. __(ver. 1.0.12 and above)__.
