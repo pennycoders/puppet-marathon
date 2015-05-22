@@ -187,7 +187,7 @@ class marathon::haproxy_config (
         path    => '/etc/named.conf',
         line    => 'dnssec-validation no;',
         match   => '.*?dnssec-validation.*$',
-        require => [File_line['nameserver 127.0.0.1']],
+        require => [File_line['dnssec-enable no;']],
         notify  => [Service['named']]
       })
 
