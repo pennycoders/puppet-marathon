@@ -54,7 +54,13 @@ class marathon::haproxy_config (
 # Additional registrator flags
   $registrator_args         = $marathon::registrator_args,
 # Setup consul DNS forwarding (see https://www.consul.io/docs/guides/forwarding.html for more details)
-  $setup_dns_forwarding     = $marathon::setup_dns_forwarding
+  $setup_dns_forwarding     = $marathon::setup_dns_forwarding,
+# IPv4 Addresses for bind to listen on
+  $bind_ipv4_listen_ips     = $marathon::bind_ipv4_listen_ips,
+# IPv6 Addresses for bind to listen on
+  $bind_ipv6_listen_ips     = $marathon::bind_ipv6_listen_ips,
+# Addresses for bind to allow recursion from (Can be both IPv6 and IPv4)
+  $bind_recursion_ips       = $marathon::bind_recursion_ips
 ) inherits marathon {
 
   validate_bool(
@@ -91,7 +97,11 @@ class marathon::haproxy_config (
     $consul_template_options,
     $consul_template_watches
   )
-
+  validate_array(
+    $bind_ipv4_listen_ips,
+    $bind_ipv6_listen_ips,
+    $bind_recursion_ips
+  )
   if $options != undef and $options['HTTP_ADDRESS'] != undef {
     if  !has_interface_with('ipaddress', $options['HTTP_ADDRESS']) {
       fail('The specified IP does not belong to this host.')

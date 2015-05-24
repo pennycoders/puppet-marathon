@@ -66,7 +66,13 @@ class marathon(
 # Additional registrator flags
   $registrator_args         = '',
 # Setup consul DNS forwarding (see https://www.consul.io/docs/guides/forwarding.html for more details)
-  $setup_dns_forwarding     = false
+  $setup_dns_forwarding     = false,
+# IPv4 Addresses for bind to listen on
+  $bind_ipv4_listen_ips     = ['127.0.0.1'],
+# IPv6 Addresses for bind to listen on
+  $bind_ipv6_listen_ips     = ['::1'],
+# Addresses for bind to allow recursion from (Can be both IPv6 and IPv4)
+  $bind_recursion_ips       = ['127.0.0.1','::1']
 ) {
 
   validate_bool(
@@ -103,7 +109,11 @@ class marathon(
     $consul_template_options,
     $consul_template_watches
   )
-
+  validate_array(
+    $bind_ipv4_listen_ips,
+    $bind_ipv6_listen_ips,
+    $bind_recursion_ips
+  )
   if $options != undef and $options['HTTP_ADDRESS'] != undef {
     if  !has_interface_with('ipaddress', $options['HTTP_ADDRESS']) {
       fail('The specified IP does not belong to this host.')
