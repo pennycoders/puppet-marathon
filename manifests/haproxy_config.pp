@@ -211,7 +211,7 @@ class marathon::haproxy_config (
         ensure  => 'present',
         path    => '/etc/named.conf',
         line    => 'recursion yes;',
-        match => '^.*?recursion.*\s(yes|no);$',
+        match   => '^.*?recursion.*\s(yes|no);$',
         require => [File_line['nameserver 127.0.0.1']],
         notify  => [Service['named']]
       })
@@ -231,7 +231,7 @@ class marathon::haproxy_config (
         path    => '/etc/named.conf',
         line    => $ipv6ListenLine,
         after   => $ipv4ListenLine,
-        match => '^.*?listen-on-v6\sport\s53.*;$',
+        match   => '^.*?listen-on-v6\sport\s53.*;$',
         require => [File_line['set bind ipv4 addresses']],
         notify  => [Service['named']]
       })
@@ -250,7 +250,7 @@ class marathon::haproxy_config (
         ensure  => 'present',
         path    => '/etc/named.conf',
         line    => 'dnssec-enable no;',
-        match => '^.*?dnssec-enable.*;$',
+        match   => '^.*?dnssec-enable.*;$',
         require => [File_line['set bind recursion ips']],
         notify  => [Service['named']]
       })
