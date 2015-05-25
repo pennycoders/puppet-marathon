@@ -207,12 +207,48 @@ class marathon::haproxy_config (
         ]
       })
 
+      ensure_resource('file_line','recursion yes;',{
+        ensure  => 'present',
+        path    => '/etc/named.conf',
+        line    => 'recursion yes;',
+        match => '^.*?recursion.*no$',
+        require => [File_line['nameserver 127.0.0.1']],
+        notify  => [Service['named']]
+      })
+
+      ensure_resource('file_line','set bind ipv4 addresses',{
+        ensure  => 'present',
+        path    => '/etc/named.conf',
+        line    => $ipv4ListenLine,
+        match => '^.*?listen-on\sport\s53.*$',
+        require => [File_line['nameserver 127.0.0.1']],
+        notify  => [Service['named']]
+      })
+
+      ensure_resource('file_line','set bind ipv6 addresses',{
+        ensure  => 'present',
+        path    => '/etc/named.conf',
+        line    => $ipv6ListenLine,
+        match => '^.*?listen-on-v6\sport\s53.*$',
+        require => [File_line['set bind ipv4 addresses']],
+        notify  => [Service['named']]
+      })
+
+      ensure_resource('file_line','set bind recursion ips',{
+        ensure  => 'present',
+        path    => '/etc/named.conf',
+        line    => $recursionIPsLine,
+        match => '^.*?allow-recursion.*$',
+        require => [File_line['set bind ipv6 addresses']],
+        notify  => [Service['named']]
+      })
+
       ensure_resource('file_line','dnssec-enable no;',{
         ensure  => 'present',
         path    => '/etc/named.conf',
         line    => 'dnssec-enable no;',
-        match => '^.*?dnssec-enable.*$',
-        require => [File_line['nameserver 127.0.0.1']],
+        match => '^.*?dnssec-enable.*yes$',
+        require => [File_line['set bind recursion ips']],
         notify  => [Service['named']]
       })
 
@@ -220,7 +256,7 @@ class marathon::haproxy_config (
         ensure  => 'present',
         path    => '/etc/named.conf',
         line    => 'dnssec-validation no;',
-        match   => '.*?dnssec-validation.*$',
+        match   => '.*?dnssec-validation.*yes$',
         require => [File_line['dnssec-enable no;']],
         notify  => [Service['named']]
       })
