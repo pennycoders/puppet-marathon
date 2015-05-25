@@ -147,7 +147,7 @@ class marathon::haproxy_config (
       }
 
       if $bindV6ipsString == undef {
-        $bindV6ipsString = join($bind_ipv4_listen_ips,'; ')
+        $bindV6ipsString = join($bind_ipv6_listen_ips,'; ')
       }
 
       if $bindRecursionIPsString == undef {
