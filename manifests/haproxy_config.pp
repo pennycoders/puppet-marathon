@@ -155,15 +155,15 @@ class marathon::haproxy_config (
       }
 
       if $ipv4ListenLine == undef and $bindV4ipsString != undef {
-        $ipv4ListenLine = "listen-on port 53 { ${bindV4ipsString} };"
+        $ipv4ListenLine = "listen-on port 53 { ${bindV4ipsString}; };"
       }
 
       if $ipv6ListenLine == undef and $bindV6ipsString != undef {
-        $ipv6ListenLine = "listen-on-v6 port 53 { ${bindV6ipsString} };"
+        $ipv6ListenLine = "listen-on-v6 port 53 { ${bindV6ipsString}; };"
       }
 
       if $recursionIPsLine == undef and $bindRecursionIPsString != undef {
-        $recursionIPsLine = "allow-recursion { ${bindRecursionIPsString} };"
+        $recursionIPsLine = "allow-recursion { ${bindRecursionIPsString}; };"
       }
 
       if is_hash($consul_options['config_hash']) and
