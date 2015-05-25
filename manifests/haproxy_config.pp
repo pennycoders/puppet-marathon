@@ -137,10 +137,34 @@ class marathon::haproxy_config (
     })
   }
 
-  if $consul_discovery == true {
-    ensure_resource('class', 'consul', $consul_options)
+  if $setup_dns_forwarding == true {
 
-    if $setup_dns_forwarding == true {
+    if $consul_discovery == true {
+      ensure_resource('class', 'consul', $consul_options)
+
+      if $bindV4ipsString == undef {
+        $bindV4ipsString = join($bind_ipv4_listen_ips,'; ')
+      }
+
+      if $bindV6ipsString == undef {
+        $bindV6ipsString = join($bind_ipv4_listen_ips,'; ')
+      }
+
+      if $bindRecursionIPsString == undef {
+        $bindRecursionIPsString = join($bind_recursion_ips,'; ')
+      }
+
+      if $ipv4ListenLine == undef and $bindV4ipsString != undef {
+        $ipv4ListenLine = "listen-on port 53 { ${bindV4ipsString} };"
+      }
+
+      if $ipv6ListenLine == undef and $bindV6ipsString != undef {
+        $ipv6ListenLine = "listen-on-v6 port 53 { ${bindV6ipsString} };"
+      }
+
+      if $recursionIPsLine == undef and $bindRecursionIPsString != undef {
+        $recursionIPsLine = "allow-recursion { ${bindRecursionIPsString} };"
+      }
 
       if is_hash($consul_options['config_hash']) and
       $consul_options['config_hash']['domain'] {
@@ -220,13 +244,13 @@ class marathon::haproxy_config (
 
   if $install_registrator == true and $consul_discovery and $install_consul_template and is_hash($consul_options['config_hash']) and $consul_options['config_hash']['client_addr'] {
     ensure_resource('docker::run','registrator', {
-      image           => 'gliderlabs/registrator:latest',
-      command         => "-ip ${consul_options['config_hash']['client_addr']} consul://${consul_options['config_hash']['client_addr']}:${consul_template_options['consul_port']} -resync ${registrator_resync} ${registrator_args}",
-      use_name        => true,
-      volumes         => ["${docker_socket_bind}:/tmp/docker.sock"],
-      memory_limit    => '10m',
-      hostname        => $::fqdn,
-      pull_on_start   => true
+  image           => 'gliderlabs/registrator:latest',
+  command         => "-ip ${consul_options['config_hash']['client_addr']} consul://${consul_options['config_hash']['client_addr']}:${consul_template_options['consul_port']} -resync ${registrator_resync} ${registrator_args}",
+  use_name        => true,
+  volumes         => ["${docker_socket_bind}:/tmp/docker.sock"],
+  memory_limit    => '10m',
+  hostname        => $::fqdn,
+  pull_on_start   => true
   })
 }
 
