@@ -211,7 +211,7 @@ class marathon::haproxy_config (
         ensure  => 'present',
         path    => '/etc/named.conf',
         line    => 'recursion yes;',
-        match => '^.*?recursion.*\s?\t?no;$',
+        match => '^.*?recursion.*\sno;$',
         require => [File_line['nameserver 127.0.0.1']],
         notify  => [Service['named']]
       })
