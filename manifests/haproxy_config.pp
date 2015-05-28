@@ -40,7 +40,7 @@ class marathon::haproxy_config (
 # Consul-template options
   $consul_template_options  = $marathon::consul_template_options,
 # Consul template watches
-  $consul_template_watches  = hiera('classes::consul_template::watches', { }),
+  $consul_template_watches  = $marathon::consul_template_watches,
 # Whether to install docker or not
   $install_docker           = $marathon::install_docker,
 # Docker socket path
