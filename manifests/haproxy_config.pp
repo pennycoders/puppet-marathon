@@ -281,7 +281,7 @@ class marathon::haproxy_config (
     }
   }
 
-  if $install_registrator == true and $consul_discovery and $install_consul_template and is_hash($consul_options['config_hash']) and $consul_options['config_hash']['client_addr'] {
+  if $install_registrator == true and $consul_discovery == true and $install_consul_template == true and is_hash($consul_options['config_hash']) and $consul_options['config_hash']['client_addr'] {
     ensure_resource('docker::run','registrator', {
   image           => 'gliderlabs/registrator:latest',
   command         => "-ip ${consul_options['config_hash']['client_addr']} consul://${consul_options['config_hash']['client_addr']}:${consul_template_options['consul_port']} -resync ${registrator_resync} ${registrator_args}",
