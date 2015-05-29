@@ -19,6 +19,8 @@ class marathon::haproxy_config (
   $haproxy_discovery        = $marathon::haproxy_discovery,
 # Whether to use nginx for load balancing between services
   $nginx_discovery          = $marathon::nginx_discovery,
+# Nginx service configurations directory
+  $nginx_services_dir       = $marathon::nginx_services_dir,
 # Create and manage the marathon service
   $manage_service           = $marathon::manage_service,
 # The marathon service's name
@@ -80,7 +82,8 @@ class marathon::haproxy_config (
   validate_absolute_path(
     $tmp_dir,
     $install_dir,
-    $docker_socket_bind
+    $docker_socket_bind,
+    $nginx_services_dir
   )
   validate_string(
     $url,
@@ -135,6 +138,25 @@ class marathon::haproxy_config (
       ensure  => 'latest',
       require => [Yumrepo['nginx']]
     })
+
+    ensure_resource('file',$nginx_services_dir, {
+      ensure  => 'directory',
+      owner   => $user,
+      purge   => true,
+      recurse => true,
+      require => [Package['nginx']],
+      mode    => 'ug=rwxs,o=rw'
+    })
+
+    ensure_resource('file_line','include services configuration files',{
+      ensure  => 'present',
+      path    => '/etc/nginx/nginx.conf',
+      line    => "include ${nginx_services_dir}/*.conf;",
+      require => [
+        File[$nginx_services_dir]
+      ]
+    })
+
   }
 
   if $setup_dns_forwarding == true {

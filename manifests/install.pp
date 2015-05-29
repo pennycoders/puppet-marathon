@@ -20,6 +20,8 @@ class marathon::install (
   $haproxy_discovery        = $marathon::haproxy_discovery,
 # Whether to use nginx for load balancing between services
   $nginx_discovery          = $marathon::nginx_discovery,
+# Nginx service configurations directory
+  $nginx_services_dir       = $marathon::nginx_services_dir,
 # Create and manage the marathon service
   $manage_service           = $marathon::manage_service,
 # The marathon service's name
@@ -81,7 +83,8 @@ class marathon::install (
   validate_absolute_path(
     $tmp_dir,
     $install_dir,
-    $docker_socket_bind
+    $docker_socket_bind,
+    $nginx_services_dir
   )
   validate_string(
     $url,

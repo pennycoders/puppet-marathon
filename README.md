@@ -29,6 +29,8 @@ class marathon(
       $haproxy_discovery        = false,
     # Whether to use nginx for load balancing between services
       $nginx_discovery          = false,
+    # Nginx service configurations directory
+      $nginx_services_dir       = '/etc/nginx/services.d',
     # Create and manage the marathon service
       $manage_service           = true,
     # The marathon service's name
@@ -98,6 +100,8 @@ class marathon::install (
       $haproxy_discovery        = $marathon::haproxy_discovery,
     # Whether to use nginx for load balancing between services
       $nginx_discovery          = $marathon::nginx_discovery,
+    # Nginx service configurations directory
+      $nginx_services_dir       = $marathon::nginx_services_dir,
     # Create and manage the marathon service
       $manage_service           = $marathon::manage_service,
     # The marathon service's name
@@ -119,7 +123,7 @@ class marathon::install (
     # Consul-template options
       $consul_template_options  = $marathon::consul_template_options,
     # Consul template watches
-      $consul_template_watches  = hiera('classes::consul_template::watches', { }),
+      $consul_template_watches  = $marathon::consul_template_watches,
     # Whether to install docker or not
       $install_docker           = $marathon::install_docker,
     # Docker socket path
@@ -167,6 +171,8 @@ class marathon::haproxy_config (
       $haproxy_discovery        = $marathon::haproxy_discovery,
     # Whether to use nginx for load balancing between services
       $nginx_discovery          = $marathon::nginx_discovery,
+    # Nginx service configurations directory
+      $nginx_services_dir       = $marathon::nginx_services_dir,
     # Create and manage the marathon service
       $manage_service           = $marathon::manage_service,
     # The marathon service's name
@@ -188,7 +194,7 @@ class marathon::haproxy_config (
     # Consul-template options
       $consul_template_options  = $marathon::consul_template_options,
     # Consul template watches
-      $consul_template_watches  = hiera('classes::consul_template::watches', { }),
+      $consul_template_watches  = $marathon::consul_template_watches,
     # Whether to install docker or not
       $install_docker           = $marathon::install_docker,
     # Docker socket path
