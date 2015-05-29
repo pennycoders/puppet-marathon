@@ -145,7 +145,7 @@ class marathon::haproxy_config (
       purge   => true,
       recurse => true,
       require => [Package['nginx']],
-      mode    => 'ug=rwxs,o=rw'
+      mode    => 'ug=rwxs,o=srwx'
     })
 
     ensure_resource('file_line','include services configuration files',{
