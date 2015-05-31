@@ -159,10 +159,11 @@ class marathon::haproxy_config (
 
   }
 
-  if $setup_dns_forwarding == true {
+  if $consul_discovery == true {
 
-    if $consul_discovery == true {
-      ensure_resource('class', 'consul', $consul_options)
+    ensure_resource('class', 'consul', $consul_options)
+
+    if $setup_dns_forwarding == true {
 
       if $bindV4ipsString == undef {
         $bindV4ipsString = join($bind_ipv4_listen_ips,'; ')
