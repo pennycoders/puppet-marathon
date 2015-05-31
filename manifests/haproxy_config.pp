@@ -164,7 +164,11 @@ class marathon::haproxy_config (
     ensure_resource('class', 'consul', $consul_options)
 
     if is_hash($consul_options['config_hash']) {
-      $consulHTTPPort = $consul_options['config_hash']['ports']['http'] or 8500
+      if $consul_options['config_hash']['ports'] and $consul_options['config_hash']['ports']['http'] != undef {
+        $consulHTTPPort = $consul_options['config_hash']['ports']['http']
+      } else {
+        $consulHTTPPort = 8500
+      }
 
       ensure_resource('consul::service','consul-http',{
         checks  => [
