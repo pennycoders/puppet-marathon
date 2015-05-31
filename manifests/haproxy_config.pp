@@ -163,6 +163,22 @@ class marathon::haproxy_config (
 
     ensure_resource('class', 'consul', $consul_options)
 
+    if is_hash($consul_options['config_hash']) {
+      $consulHTTPPort = $consul_options['config_hash']['ports']['http'] or 8500
+
+      ensure_resource('consul::service','consul-http',{
+        checks  => [
+          {
+            id       => 'consul-http',
+            interval => '10s',
+            http     => "http://$consul_options['config_hash']['client_addr']:${consulHTTPPort}",
+            name     => "Consul web-ui is running on $consulHTTPPort"
+          }
+        ],
+        port    => $consulHTTPPort
+      })
+    }
+
     if $setup_dns_forwarding == true {
 
       if $bindV4ipsString == undef {
@@ -310,14 +326,14 @@ class marathon::haproxy_config (
   }
   if $install_registrator == true and $consul_discovery == true and $install_consul_template == true and is_hash($consul_options['config_hash']) and $consul_options['config_hash']['client_addr'] {
     ensure_resource('docker::run','registrator', {
-      image           => 'gliderlabs/registrator:latest',
-      notify          => $registratorInterestedParties,
-      command         => "-ip ${consul_options['config_hash']['client_addr']} consul://${consul_options['config_hash']['client_addr']}:${consul_template_options['consul_port']} -resync ${registrator_resync} ${registrator_args}",
-      use_name        => true,
-      volumes         => ["${docker_socket_bind}:/tmp/docker.sock"],
-      memory_limit    => '10m',
-      hostname        => $::fqdn,
-      pull_on_start   => true
+  image           => 'gliderlabs/registrator:latest',
+  notify          => $registratorInterestedParties,
+  command         => "-ip ${consul_options['config_hash']['client_addr']} consul://${consul_options['config_hash']['client_addr']}:${consul_template_options['consul_port']} -resync ${registrator_resync} ${registrator_args}",
+  use_name        => true,
+  volumes         => ["${docker_socket_bind}:/tmp/docker.sock"],
+  memory_limit    => '10m',
+  hostname        => $::fqdn,
+  pull_on_start   => true
   })
 }
 
