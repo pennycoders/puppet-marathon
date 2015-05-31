@@ -164,7 +164,12 @@ class marathon::haproxy_config (
     ensure_resource('class', 'consul', $consul_options)
 
     if is_hash($consul_options['config_hash']) {
-      if $consul_options['config_hash']['ports'] and $consul_options['config_hash']['ports']['http'] != undef {
+      if $consul_options['config_hash']['client_addr'] != undef {
+        $consulHTTPAddress = $consul_options['config_hash']['client_addr']
+      }
+
+      if $consul_options['config_hash']['ports'] and
+      $consul_options['config_hash']['ports']['http'] != undef {
         $consulHTTPPort = $consul_options['config_hash']['ports']['http']
       } else {
         $consulHTTPPort = 8500
@@ -175,7 +180,7 @@ class marathon::haproxy_config (
           {
             id       => 'consul-http-check',
             interval => '10s',
-            http     => "http://$consul_options['config_hash']['client_addr']:${consulHTTPPort}",
+            http     => "http://${consulHTTPAddress}:${consulHTTPPort}/v1/catalog/services",
             name     => "Consul web-ui is running on $consulHTTPPort"
           }
         ],
