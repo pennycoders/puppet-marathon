@@ -113,21 +113,25 @@ class marathon::install (
   }
 
   if $manage_user == true and !defined(User[$user]) and !defined(Group[$user]) and $user != 'root' {
-    group { $user:
+    ensure_resource('group', $user, {
       ensure => present,
       name   => $user
-    }
-    user { $user:
+    })
+
+    ensure_resource('user', $user, {
       ensure     => present,
       managehome => true,
       shell      => '/sbin/nologin',
       require    => [Group[$user]],
       groups     => [$user,'root']
-    }
+    })
+
   } elsif  $manage_user == true and !defined(User[$user]) and $user == 'root' {
-    user { $user:
+
+    ensure_resource('user', $user, {
       ensure     => present
-    }
+    })
+
   }
 
   ensure_resource('archive', $service_name, {
