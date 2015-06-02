@@ -143,8 +143,9 @@ class marathon::install (
     follow_redirects => true,
     extension        => 'tgz',
     checksum         => $checksum,
-    digest_string       => $digest_string,
+    digest_string    => $digest_string,
     digest_type      => $digest_type,
+    purge_target     => true,
     notify           => [File[$install_dir]]
   })
 
