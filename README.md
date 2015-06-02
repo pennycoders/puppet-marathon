@@ -12,15 +12,17 @@ class marathon(
     # Install or uninstall (present|absent)
       $installation_ensure      = 'present',
     # Marathon binary url
-      $url                      = 'https://downloads.mesosphere.io/marathon/v0.8.2-RC1/marathon-0.8.2-RC1.tgz',
+      $url                      = 'https://downloads.mesosphere.io/marathon/v0.8.2-RC4/marathon-0.8.2-RC4.tgz',
     # Marathon binary digest string
-      $digest_string            = '45a481f4703e1455f8aafa037705c9033200f2dc7f9d5e6414acde533d6cb935',
+      $digest_string            = '7159bd327a6b7ad7dd7e92bb490fc1cc229bc5f799f34a91da7b9e60a42454c3',
     # The digest type
       $digest_type              = 'sha256',
     # Temporary directory to download the files to
       $tmp_dir                  = '/tmp',
     # Marathon Installation directory
       $install_dir              = '/opt/marathon',
+    # Purge the installation directory
+      $purge_install_dir        = false,
     # The username that marathon will submit tasks as
       $user                     = 'root',
     # Create symlinks for the marathon binaries for easier access
@@ -55,10 +57,13 @@ class marathon(
       $consul_template_watches  = hiera('classes::consul_template::watches', { }),
     # Whether to install docker or not
       $install_docker           = true,
-    # Docker socket path
-      $docker_socket_bind       = '/var/run/docker.sock',
-    # Docker DNS
-      $docker_dns               = '8.8.8.8',
+    # Docker options (for more details read https://github.com/garethr/garethr-docker)
+      $docker_options           = hiera('classes::docker::options', {
+        dns          => '8.8.8.8',
+        socket_bind  => "unix:///var/run/docker.sock",
+        docker_users => [$user],
+        socket_group => $user
+      }),
     # Whether to install registraator or not
       $install_registrator      = true,
     # How often should registrator query docker for services (See: https://github.com/gliderlabs/registrator)
@@ -92,6 +97,8 @@ class marathon::install (
       $tmp_dir                  = $marathon::tmp_dir,
     # Marathon Installation directory
       $install_dir              = $marathon::install_dir,
+    # Purge the installation directory
+      $purge_install_dir        = $marathon::purge_install_dir,
     # The username that marathon will submit tasks as
       $user                     = $marathon::user,
     # Create symlinks for the marathon binaries for easier access
@@ -126,10 +133,8 @@ class marathon::install (
       $consul_template_watches  = $marathon::consul_template_watches,
     # Whether to install docker or not
       $install_docker           = $marathon::install_docker,
-    # Docker socket path
-      $docker_socket_bind       = $marathon::docker_socket_bind,
-    # Docker DNS
-      $docker_dns               = $marathon::docker_dns,
+    # Docker options (for more details read https://github.com/garethr/garethr-docker)
+      $docker_options           = $marathon::docker_options,
     # Whether to install registraator or not
       $install_registrator      = $marathon::install_registrator,
     # How often should registrator query docker for services (See: https://github.com/gliderlabs/registrator)
@@ -163,6 +168,8 @@ class marathon::haproxy_config (
       $tmp_dir                  = $marathon::tmp_dir,
     # Marathon Installation directory
       $install_dir              = $marathon::install_dir,
+    # Purge the installation directory
+      $purge_install_dir        = $marathon::purge_install_dir,
     # The username that marathon will submit tasks as
       $user                     = $marathon::user,
     # Create symlinks for the marathon binaries for easier access
@@ -197,10 +204,8 @@ class marathon::haproxy_config (
       $consul_template_watches  = $marathon::consul_template_watches,
     # Whether to install docker or not
       $install_docker           = $marathon::install_docker,
-    # Docker socket path
-      $docker_socket_bind       = $marathon::docker_socket_bind,
-    # Docker DNS
-      $docker_dns               = $marathon::docker_dns,
+    # Docker options (for more details read https://github.com/garethr/garethr-docker)
+      $docker_options           = $marathon::docker_options,
     # Whether to install registraator or not
       $install_registrator      = $marathon::install_registrator,
     # How often should registrator query docker for services (See: https://github.com/gliderlabs/registrator)

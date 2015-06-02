@@ -23,6 +23,8 @@ class marathon(
   $tmp_dir                  = '/tmp',
 # Marathon Installation directory
   $install_dir              = '/opt/marathon',
+# Purge the installation directory
+  $purge_install_dir        = false,
 # The username that marathon will submit tasks as
   $user                     = 'root',
 # Create symlinks for the marathon binaries for easier access
@@ -57,10 +59,13 @@ class marathon(
   $consul_template_watches  = hiera('classes::consul_template::watches', { }),
 # Whether to install docker or not
   $install_docker           = true,
-# Docker socket path
-  $docker_socket_bind       = '/var/run/docker.sock',
-# Docker DNS
-  $docker_dns               = '8.8.8.8',
+# Docker options (for more details read https://github.com/garethr/garethr-docker)
+  $docker_options           = hiera('classes::docker::options', {
+    dns          => '8.8.8.8',
+    socket_bind  => "unix:///var/run/docker.sock",
+    docker_users => [$user],
+    socket_group => $user
+  }),
 # Whether to install registraator or not
   $install_registrator      = true,
 # How often should registrator query docker for services (See: https://github.com/gliderlabs/registrator)
@@ -89,19 +94,18 @@ class marathon(
     $install_consul_template,
     $install_docker,
     $install_registrator,
-    $setup_dns_forwarding
+    $setup_dns_forwarding,
+    $purge_install_dir
   )
   validate_absolute_path(
     $tmp_dir,
     $install_dir,
-    $docker_socket_bind,
     $nginx_services_dir
   )
   validate_string(
     $url,
     $digest_string,
     $user,
-    $docker_dns,
     $registrator_args
   )
   validate_integer($registrator_resync)
@@ -110,7 +114,8 @@ class marathon(
     $options,
     $consul_options,
     $consul_template_options,
-    $consul_template_watches
+    $consul_template_watches,
+    $docker_options
   )
   validate_array(
     $bind_ipv4_listen_ips,

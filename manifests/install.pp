@@ -12,6 +12,8 @@ class marathon::install (
   $tmp_dir                  = $marathon::tmp_dir,
 # Marathon Installation directory
   $install_dir              = $marathon::install_dir,
+# Purge the installation directory
+  $purge_install_dir        = $marathon::purge_install_dir,
 # The username that marathon will submit tasks as
   $user                     = $marathon::user,
 # Create symlinks for the marathon binaries for easier access
@@ -46,10 +48,8 @@ class marathon::install (
   $consul_template_watches  = $marathon::consul_template_watches,
 # Whether to install docker or not
   $install_docker           = $marathon::install_docker,
-# Docker socket path
-  $docker_socket_bind       = $marathon::docker_socket_bind,
-# Docker DNS
-  $docker_dns               = $marathon::docker_dns,
+# Docker options (for more details read https://github.com/garethr/garethr-docker)
+  $docker_options           = $marathon::docker_options,
 # Whether to install registraator or not
   $install_registrator      = $marathon::install_registrator,
 # How often should registrator query docker for services (See: https://github.com/gliderlabs/registrator)
@@ -78,19 +78,18 @@ class marathon::install (
     $install_consul_template,
     $install_docker,
     $install_registrator,
-    $setup_dns_forwarding
+    $setup_dns_forwarding,
+    $purge_install_dir
   )
   validate_absolute_path(
     $tmp_dir,
     $install_dir,
-    $docker_socket_bind,
     $nginx_services_dir
   )
   validate_string(
     $url,
     $digest_string,
     $user,
-    $docker_dns,
     $registrator_args
   )
   validate_integer($registrator_resync)
@@ -99,7 +98,8 @@ class marathon::install (
     $options,
     $consul_options,
     $consul_template_options,
-    $consul_template_watches
+    $consul_template_watches,
+    $docker_options
   )
   validate_array(
     $bind_ipv4_listen_ips,
@@ -145,7 +145,7 @@ class marathon::install (
     checksum         => $checksum,
     digest_string    => $digest_string,
     digest_type      => $digest_type,
-    purge_target     => true,
+    purge_target     => $purge_install_dir,
     notify           => [File[$install_dir]]
   })
 
