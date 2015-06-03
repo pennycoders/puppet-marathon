@@ -339,6 +339,7 @@ class marathon::haproxy_config (
       memory_limit     => '10m',
       hostname         => $::fqdn,
       require          => [Notify['Installing registrator...']],
+      use_name         => false,
       extra_parameters => ['--restart=always'],
       pull_on_start    => true
   })
