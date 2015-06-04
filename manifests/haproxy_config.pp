@@ -338,7 +338,7 @@ class marathon::haproxy_config (
       volumes          => ["${socketPath}:/tmp/docker.sock"],
       memory_limit     => '10m',
       hostname         => $::fqdn,
-      require          => [Notify['Installing registrator...']],
+      require          => [Notify["Installing registrator with socket path ${socketPath}..."]],
       use_name         => false,
       extra_parameters => ['--restart=always'],
       pull_on_start    => true
