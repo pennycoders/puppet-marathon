@@ -176,7 +176,7 @@ class marathon::haproxy_config (
             id       => 'consul-http-check',
             interval => '10s',
             http     => "http://${consulHTTPAddress}:${consulHTTPPort}/v1/catalog/services",
-            name     => "Consul web-ui is running on $consulHTTPPort"
+            name     => "Consul web-ui is running on ${consulHTTPPort}"
           }
         ],
         port    => $consulHTTPPort
